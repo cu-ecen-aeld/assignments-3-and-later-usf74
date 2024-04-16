@@ -16,6 +16,15 @@ bool do_system(const char *cmd)
  *   and return a boolean true if the system() call completed with success
  *   or false() if it returned a failure
 */
+    int x=system(cmd);
+    if (x>=0)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 
     return true;
 }
@@ -59,6 +68,43 @@ bool do_exec(int count, ...)
  *
 */
 
+    int execexit;
+    int wstatus;
+    pid_t pid = fork();
+    if (pid == 0)
+    {
+        execexit = execv(command[0], command);
+        if (execexit == -1)
+        {
+            //fprintf(stderr,"\n\nexec error here from child\n\n");
+            _exit(1);
+        }
+    }
+    else if (pid > 0)
+    {
+        if (wait(&wstatus) == -1)
+        {
+            //fprintf(stderr,"\n\n returning false by fork\nwstatus is %d\n\n",wstatus);
+            return false;
+        }
+        if (WEXITSTATUS(wstatus) != 0)
+        {
+            //fprintf(stderr,"\n\n returning false due wstatus\nwstatus is %d\n\nWEXITSTATUS(wstatus)=%d\n\n",wstatus,WEXITSTATUS(wstatus));
+            return false;
+        }
+        //fprintf(stderr,"\n\n debug----WEXITSTATUS(wstatus)  is %d\n\n",WEXITSTATUS(wstatus) );
+
+    }
+                //fprintf(stderr,"\n\n debug----HEEEREEE 0 %d\n\n",wstatus);
+
+    else    //Error in fork
+    {
+        //fprintf(stderr,"\n\n fork fail \n\n");
+        return false;
+    }
+            //fprintf(stderr,"\n\n debug----HEEEREEE 2 %d\n\n",wstatus);
+
+
     va_end(args);
 
     return true;
@@ -93,6 +139,48 @@ bool do_exec_redirect(const char *outputfile, int count, ...)
  *
 */
 
+    int fd=open(outputfile,O_WRONLY | O_TRUNC | O_CREAT, 0644);
+    dup2(fd, 1);
+
+    int execexit;
+    int wstatus;
+    pid_t pid = fork();
+    if (pid == 0)
+    {
+        execexit = execv(command[0], command);
+        if (execexit == -1)
+        {
+            //fprintf(stderr,"\n\nexec error here from child\n\n");
+            _exit(1);
+        }
+    }
+    else if (pid > 0)
+    {
+        if (wait(&wstatus) == -1)
+        {
+           // fprintf(stderr,"\n\n returning false by fork\nwstatus is %d\n\n",wstatus);
+            return false;
+        }
+        if (WEXITSTATUS(wstatus) != 0)
+        {
+           //fprintf(stderr,"\n\n returning false due wstatus\nwstatus is %d\n\nWEXITSTATUS(wstatus)=%d\n\n",wstatus,WEXITSTATUS(wstatus));
+            return false;
+        }
+        //fprintf(stderr,"\n\n debug----WEXITSTATUS(wstatus)  is %d\n\n",WEXITSTATUS(wstatus) );
+
+    }
+                //fprintf(stderr,"\n\n debug----HEEEREEE 0 %d\n\n",wstatus);
+
+    else    //Error in fork
+    {
+        //fprintf(stderr,"\n\n fork fail \n\n");
+        return false;
+    }
+            //fprintf(stderr,"\n\n debug----HEEEREEE 2 %d\n\n",wstatus);
+
+
+
+    close(fd);
     va_end(args);
 
     return true;
