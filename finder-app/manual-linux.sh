@@ -13,8 +13,7 @@ FINDER_APP_DIR=$(realpath $(dirname $0))
 export ARCH=arm64
 export CROSS_COMPILE=aarch64-none-linux-gnu-
 export PATH=$PATH:~/gcc-arm-10.3-2021.07-x86_64-aarch64-none-linux-gnu/bin
-GCC_PATH=/usr/local/arm-cross-compiler/install/gcc-arm-10.3-2021.07-x86_64-aarch64-none-linux-gnu
-FINDER_PATH=~/Embedded_Linux/assignment3p1/finder-app
+#FINDER_APP_DIR=$(dirname $0)
 
 if [ $# -lt 1 ]
 then
@@ -92,24 +91,23 @@ ${CROSS_COMPILE}readelf -a ${OUTDIR}/rootfs/bin/busybox | grep "program interpre
 ${CROSS_COMPILE}readelf -a ${OUTDIR}/rootfs/bin/busybox | grep "Shared library"
 
 # TODO: Add library dependencies to rootfs
-cp ${GCC_PATH}/aarch64-none-linux-gnu/libc/lib64/libc.so.6 ${OUTDIR}/rootfs/lib64/
-cp ${GCC_PATH}/aarch64-none-linux-gnu/libc/lib64/libm.so.6 ${OUTDIR}/rootfs/lib64/
-cp ${GCC_PATH}/aarch64-none-linux-gnu/libc/lib64/libresolv.so.2 ${OUTDIR}/rootfs/lib64/
+cp ${LAUCNH_PATH}/wantedgccfiles/libc.so.6 ${OUTDIR}/rootfs/lib64/
+cp ${LAUCNH_PATH}/wantedgccfiles/libm.so.6 ${OUTDIR}/rootfs/lib64/
+cp ${LAUCNH_PATH}/wantedgccfiles/libresolv.so.2 ${OUTDIR}/rootfs/lib64/
 
-#cp ${GCC_PATH}/aarch64-none-linux-gnu/libc/lib64/ld-2.33.so ${OUTDIR}/rootfs/lib64/
-cp ${GCC_PATH}/aarch64-none-linux-gnu/libc/lib/ld-linux-aarch64.so.1 ${OUTDIR}/rootfs/lib/
+cp ${LAUCNH_PATH}/wantedgccfiles/ld-linux-aarch64.so.1 ${OUTDIR}/rootfs/lib/
 # TODO: Make device nodes
 sudo mknod -m 666 ${OUTDIR}/rootfs/dev/null c 1 3
 sudo mknod -m 600 ${OUTDIR}/rootfs/dev/tty c 5 1
 # TODO: Clean and build the writer utility
-cd ${FINDER_PATH} #Going to finder app directory to make and clean
+cd ${FINDER_APP_DIR} #Going to finder app directory to make and clean
 make clean
 make all
 # TODO: Copy the finder related scripts and executables to the /home directory
 # on the target rootfs
 cp writer finder.sh finder-test.sh autorun-qemu.sh ${OUTDIR}/rootfs/home/
 mkdir -p ${OUTDIR}/rootfs/home/conf
-cp -r ${FINDER_PATH}/conf/. ${OUTDIR}/rootfs/home/conf
+cp -r ${FINDER_APP_DIR}/conf/. ${OUTDIR}/rootfs/home/conf
 # TODO: Chown the root directory
 cd ${OUTDIR}/rootfs/
 sudo chown -R root:root *
