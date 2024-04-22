@@ -13,8 +13,8 @@ FINDER_APP_DIR=$(realpath $(dirname $0))
 export ARCH=arm64
 export CROSS_COMPILE=aarch64-none-linux-gnu-
 export PATH=$PATH:~/gcc-arm-10.3-2021.07-x86_64-aarch64-none-linux-gnu/bin
-GCC_PATH=~/gcc-arm-10.3-2021.07-x86_64-aarch64-none-linux-gnu/
-FINDER_PATH=~/Embedded_Linux/assignment3p1/finder-app/
+GCC_PATH=/usr/local/arm-cross-compiler/install/gcc-arm-10.3-2021.07-x86_64-aarch64-none-linux-gnu
+FINDER_PATH=~/Embedded_Linux/assignment3p1/finder-app
 
 if [ $# -lt 1 ]
 then
