@@ -1,12 +1,18 @@
+CC := gcc
+CROSS_COMPILE ?=
+TGT := writer
+SRC := writer.c
+OBJ := $(SRC:.c=.o)
+CFLAGS ?= 
 
-var=gcc
 ifdef CROSS_COMPILE
-
-	var=${CROSS_COMPILE}gcc
-
+CC := $(CROSS_COMPILE)gcc
 endif
-all: writer.c
-	${var} -o writer writer.c
+
+all: $(TGT)
+
+$(TGT): $(SRC)
+	$(CC) $(CFLAGS) -o $(TGT) $(SRC)
+
 clean:
-	rm -f writer
-	rm -f *.o
+	rm -f $(TGT) $(OBJ)
