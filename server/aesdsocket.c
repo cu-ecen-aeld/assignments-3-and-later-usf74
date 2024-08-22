@@ -91,11 +91,11 @@ int main(int argc, char *argv[])
         printf("Addrinfo found ! \n");
     }
 
-    do
-    {
-        ret = bind(sfd, res->ai_addr, res->ai_addrlen); 
+    //do
+    //{
+    ret = bind(sfd, res->ai_addr, res->ai_addrlen); 
         /* code */
-    } while (ret != 0); //loop till bind for github action runer
+    //} while (ret != 0); //loop till bind for github action runer
     freeaddrinfo(res);
 
     if (ret != 0)
@@ -136,7 +136,7 @@ int main(int argc, char *argv[])
     struct sockaddr peerinfo;
     socklen_t peerlen = sizeof(peerinfo);
 
-    char buffer[16384];
+    char buffer[32];
     int fd = open("/var/tmp/aesdsocketdata", O_CREAT | O_RDWR | O_TRUNC, S_IRWXU);
 
     if (fd < 0)
@@ -175,7 +175,7 @@ int main(int argc, char *argv[])
         while (1) // Rx loop
         {
             memset(buffer, 0, sizeof(buffer));
-            int nrx = recv(srxfd, buffer, new_size, 0);
+            int nrx = recv(srxfd, buffer, sizeof(buffer), 0);
 
             if (globshutflag)
             {
@@ -209,10 +209,26 @@ int main(int argc, char *argv[])
         //***************************************** */
         lseek(fd, SEEK_SET, 0);
         fstat(fd, &fst);
-        char *txbuffer = malloc(sizeof(fst.st_size));
+/*         char *txbuffer = malloc(sizeof(fst.st_size));
         read(fd, txbuffer, fst.st_size);
         send(srxfd, txbuffer, fst.st_size, 0);
-        free(txbuffer);
+        free(txbuffer); */
+
+        char txbuffer[32];
+        
+        while (1)
+        {
+            memset(txbuffer,0,sizeof(txbuffer));
+            int nread = read(fd,txbuffer,sizeof(txbuffer));
+            if (nread == 0)
+            {
+                break;
+            }
+            
+            send(srxfd,txbuffer,nread,0);
+        }
+        
+
 
         printf("Closing connection from %u.%u.%u.%u : %u\n", (unsigned char)peerinfo.sa_data[2], (unsigned char)peerinfo.sa_data[3], (unsigned char)peerinfo.sa_data[4], (unsigned char)peerinfo.sa_data[5], (unsigned short)((unsigned short)(peerinfo.sa_data[0] << 8) | (unsigned short)peerinfo.sa_data[1]));
         //syslog(LOG_INFO, "Closing connection from %u.%u.%u.%u : %u\n", (unsigned char)peerinfo.sa_data[2], (unsigned char)peerinfo.sa_data[3], (unsigned char)peerinfo.sa_data[4], (unsigned char)peerinfo.sa_data[5], (unsigned short)((unsigned short)(peerinfo.sa_data[0] << 8) | (unsigned short)peerinfo.sa_data[1]));
