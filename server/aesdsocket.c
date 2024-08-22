@@ -48,7 +48,12 @@ int main(int argc, char *argv[])
     int new_size = 32768;
     int sfd = socket(PF_INET, SOCK_STREAM, 0);
     char opt=1;
-    setsockopt(sfd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
+    //setsockopt(sfd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
+
+    int yes=1;
+	if (setsockopt(sfd,SOL_SOCKET,SO_REUSEADDR,&yes,sizeof yes) == -1) {
+		printf("setsockopt error");
+	}
 
     // int hehe2 = setsockopt(sfd, 6, SOL_SOCKET, &new_size, sizeof(new_size));
     // int hehe = setsockopt(sfd, 6, SO_RCVBUF, &new_size, sizeof(new_size));
