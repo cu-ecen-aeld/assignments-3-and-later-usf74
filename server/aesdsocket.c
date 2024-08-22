@@ -47,6 +47,8 @@ int main(int argc, char *argv[])
     struct stat fst;
     int new_size = 32768;
     int sfd = socket(PF_INET, SOCK_STREAM, 0);
+    char opt=1;
+    setsockopt(sfd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
 
     // int hehe2 = setsockopt(sfd, 6, SOL_SOCKET, &new_size, sizeof(new_size));
     // int hehe = setsockopt(sfd, 6, SO_RCVBUF, &new_size, sizeof(new_size));
@@ -85,6 +87,7 @@ int main(int argc, char *argv[])
     }
 
     ret = bind(sfd, res->ai_addr, res->ai_addrlen);
+    freeaddrinfo(res);
 
     if (ret != 0)
     {
@@ -96,7 +99,6 @@ int main(int argc, char *argv[])
         printf("Bounded ! \n");
     }
 
-    freeaddrinfo(res);
     //freeaddrinfo(&hints);
 
     pid_t forkvar = -1;
