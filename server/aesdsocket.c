@@ -86,7 +86,11 @@ int main(int argc, char *argv[])
         printf("Addrinfo found ! \n");
     }
 
-    ret = bind(sfd, res->ai_addr, res->ai_addrlen);
+    do
+    {
+        ret = bind(sfd, res->ai_addr, res->ai_addrlen); 
+        /* code */
+    } while (ret != 0); //loop till bind for github action runer
     freeaddrinfo(res);
 
     if (ret != 0)
