@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
         printf("Error in arguements\n");
         return -1;
     }
-    openlog("AESDSOCKET",0,LOG_USER);
+    //openlog("AESDSOCKET",0,LOG_USER);
 
     struct sigaction termact;
     memset(&termact, 0, sizeof(termact));
@@ -169,7 +169,7 @@ int main(int argc, char *argv[])
         else
         {
             printf("Accepted connection from %u.%u.%u.%u : %u\n", (unsigned char)peerinfo.sa_data[2], (unsigned char)peerinfo.sa_data[3], (unsigned char)peerinfo.sa_data[4], (unsigned char)peerinfo.sa_data[5], (unsigned short)((unsigned short)(peerinfo.sa_data[0] << 8) | (unsigned short)peerinfo.sa_data[1]));
-            syslog(LOG_INFO, "Accepted connection from %u.%u.%u.%u : %u\n", (unsigned char)peerinfo.sa_data[2], (unsigned char)peerinfo.sa_data[3], (unsigned char)peerinfo.sa_data[4], (unsigned char)peerinfo.sa_data[5], (unsigned short)((unsigned short)(peerinfo.sa_data[0] << 8) | (unsigned short)peerinfo.sa_data[1]));
+            //syslog(LOG_INFO, "Accepted connection from %u.%u.%u.%u : %u\n", (unsigned char)peerinfo.sa_data[2], (unsigned char)peerinfo.sa_data[3], (unsigned char)peerinfo.sa_data[4], (unsigned char)peerinfo.sa_data[5], (unsigned short)((unsigned short)(peerinfo.sa_data[0] << 8) | (unsigned short)peerinfo.sa_data[1]));
         }
 
         while (1) // Rx loop
@@ -215,10 +215,10 @@ int main(int argc, char *argv[])
         free(txbuffer);
 
         printf("Closing connection from %u.%u.%u.%u : %u\n", (unsigned char)peerinfo.sa_data[2], (unsigned char)peerinfo.sa_data[3], (unsigned char)peerinfo.sa_data[4], (unsigned char)peerinfo.sa_data[5], (unsigned short)((unsigned short)(peerinfo.sa_data[0] << 8) | (unsigned short)peerinfo.sa_data[1]));
-        syslog(LOG_INFO, "Closing connection from %u.%u.%u.%u : %u\n", (unsigned char)peerinfo.sa_data[2], (unsigned char)peerinfo.sa_data[3], (unsigned char)peerinfo.sa_data[4], (unsigned char)peerinfo.sa_data[5], (unsigned short)((unsigned short)(peerinfo.sa_data[0] << 8) | (unsigned short)peerinfo.sa_data[1]));
+        //syslog(LOG_INFO, "Closing connection from %u.%u.%u.%u : %u\n", (unsigned char)peerinfo.sa_data[2], (unsigned char)peerinfo.sa_data[3], (unsigned char)peerinfo.sa_data[4], (unsigned char)peerinfo.sa_data[5], (unsigned short)((unsigned short)(peerinfo.sa_data[0] << 8) | (unsigned short)peerinfo.sa_data[1]));
         shutdown(srxfd, SHUT_RDWR);
     }
-    syslog(LOG_INFO, "Caught signal, exiting\n");
+    //syslog(LOG_INFO, "Caught signal, exiting\n");
     // printf("Errno is %d\n", errno);
     // printf("Error in syslog %s\n",strerror(errno));
     printf("Caught signal, exiting\n");
