@@ -12,7 +12,7 @@ endif
 all: $(TGT)
 
 $(TGT): $(SRC)
-	$(CC) $(CFLAGS) -o $(TGT) $(SRC)
+	$(CC) $(CFLAGS) -o $(TGT) -ggdb3 $(SRC)
 
 clean:
 	rm -f $(TGT) $(OBJ)

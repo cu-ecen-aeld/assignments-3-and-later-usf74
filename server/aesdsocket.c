@@ -22,6 +22,7 @@ void sigactfunc(int sigtype)
     }
 }
 
+
 int main(int argc, char *argv[])
 {
     if (argc > 2 || ((argc == 2) && strcmp(argv[1], "-d")))
@@ -96,6 +97,7 @@ int main(int argc, char *argv[])
     }
 
     freeaddrinfo(res);
+    //freeaddrinfo(&hints);
 
     pid_t forkvar = -1;
     if (argc == 2)
@@ -196,7 +198,7 @@ int main(int argc, char *argv[])
         //***************************************** */
         lseek(fd, SEEK_SET, 0);
         fstat(fd, &fst);
-        int *txbuffer = malloc(sizeof(fst.st_size));
+        char *txbuffer = malloc(sizeof(fst.st_size));
         read(fd, txbuffer, fst.st_size);
         send(srxfd, txbuffer, fst.st_size, 0);
         free(txbuffer);
