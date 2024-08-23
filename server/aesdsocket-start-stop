@@ -1,5 +1,5 @@
 
-socket_path='/home/youssef/Embedded_Linux/assignment3pt2/server/aesdsocket'
+socket_path='/usr/bin/aesdsocket'
 case "$1" in
 	start)
 		echo "Starting aesdsocket"
